@@ -18,13 +18,5 @@
     <ClCompile Include="program.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dqueue.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="dqueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
