@@ -15,8 +15,42 @@ void MakeNull(DQueue* q) {
 	q->last = 0;
 }
 
+// DQueue je prazan
 int Empty(DQueue* q) {
 	return q->first == q->last;
+}
+
+// Broj elemenata u queue-u
+// 
+//                           Indeksi u polje
+//                            |0123456789|                                                                                              o
+//  Zadnja strana polja ->    |--321-----|   <- Prednja strana polja (first element, front element), ako promatramo sa desne strane    /|\
+//                                                                                                                                     / \
+// 
+// |0123456789|  <- Indeksi u polje/array
+// |---XXXX---|  <- Array; first je 7, last je 3; 7 - 3 = 4
+//
+// |0123456789|
+// |XXXXX-----|  <- Array; first je 5, last je 0; 5 - 0 = 5
+//
+// |0123456789|
+// |XZ---AXXXX|  <- Array; first je 2, last je 5; 2 - (5 - DQUEUE_MAXLENGTH) = 2 - (5 - 10) = 7
+//                  Oduzimamo last sa DQUEUE_MAXLENGTH jer elementi na pocetku polja overflowaju na drugu stranu jer smo ograniceni sa velicinom elements arraya,
+//                  (circular buffer), ako gledamo polje sa desne strane i "prvi" nam je element do nas
+//
+// |0123456789|
+// |--AXXXXXZ-|  <- Array; first je 9, last je 2; 9 - 2 = 7
+//                  Isto kao primjer iznad, samo su svu elementi pomaknuti u lijevo za 3 mjesta, pa ne overflowaju sa desne strane u lijevu stranu
+//
+int Count(DQueue* q) {
+	int last = q->last;
+	int first = q->first;
+
+	if (last > first) {
+		last = last - DQUEUE_MAXLENGTH;
+	}
+
+	return first - last;
 }
 
 // U obicnom queue-u je ovo funkcija Enqueue
@@ -81,6 +115,26 @@ int DequeueBack(DQueue* q) {
 	q->elements[index] = -1;
 
 	return result;
+}
+
+// Element na pocetku queue-a, element koji je zadnji dodan
+int Front(DQueue* q) {
+	// First pokazuje na prvo slobodno mjesto, pa ga umanjimo za -1
+	int index = q->first - 1;
+
+	// Wrap around
+	if (index < 0)
+		index = DQUEUE_MAXLENGTH - 1;
+
+	return q->elements[index];
+}
+
+// Element na kraju queue-a, element koji je prvi dodan
+int Back(DQueue* q) {
+	// Last pokazuje na prvo zauzeto mjesto sa zadnje strane, nije potreban ++ ili --
+	int index = q->last;
+
+	return q->elements[index];
 }
 
 //-------------------------------------------------------------------------------
@@ -152,7 +206,7 @@ void DoData(DQueue* Q) {
 
 void main() {
 	DQueue Q;
-	MakeNull(&Q); // MakeNull u ovom slucaju postavlja oba indexa u 4
+	MakeNull(&Q);
 
 	/*DoData(&Q);
 	while (1) {
@@ -173,19 +227,22 @@ void main() {
 				EnqueueFront(&Q, num);
 				PrintQueue(&Q);
 
-			} else if (!strcmp(cmd2, "KRAJ")) {
+			}
+			else if (!strcmp(cmd2, "KRAJ")) {
 
 				EnqueueBack(&Q, num);
 				PrintQueue(&Q);
 
 			}
-		} else if (!strcmp(cmd1, "IZBACI")) {
+		}
+		else if (!strcmp(cmd1, "IZBACI")) {
 			if (!strcmp(cmd2, "POCETAK")) {
 
 				DequeueFront(&Q);
 				PrintQueue(&Q);
 
-			} else if (!strcmp(cmd2, "KRAJ")) {
+			}
+			else if (!strcmp(cmd2, "KRAJ")) {
 
 				DequeueBack(&Q);
 				PrintQueue(&Q);
