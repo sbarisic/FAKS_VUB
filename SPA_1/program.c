@@ -17,7 +17,7 @@ void MakeNull(DQueue* q) {
 
 // DQueue je prazan
 int Empty(DQueue* q) {
-	return q->first == q->last;
+	return (q->first) == (q->last);
 }
 
 // Broj elemenata u queue-u
@@ -65,8 +65,9 @@ void EnqueueFront(DQueue* q, int element) {
 	// Ako je indeks veci od duzine polja, idemo ispocetka
 	// Jer MakeNull ne mora nuzno postaviti i first i last u nulu
 	// To moze biti bilo koji arbitrarni indeks u polju
-	if (q->first >= DQUEUE_MAXLENGTH)
+	if (q->first >= DQUEUE_MAXLENGTH) {
 		q->first = 0;
+	}
 }
 
 void EnqueueBack(DQueue* q, int element) {
@@ -74,8 +75,9 @@ void EnqueueBack(DQueue* q, int element) {
 	q->last--;
 
 	// Wrap around
-	if (q->last < 0)
+	if (q->last < 0) {
 		q->last = DQUEUE_MAXLENGTH - 1;
+	}
 
 	// Postaviti element u prvo slobodno mjesto sa zadnje strane
 	q->elements[q->last] = element;
@@ -86,8 +88,9 @@ int DequeueFront(DQueue* q) {
 	q->first--;
 
 	// Wrap around
-	if (q->first < 0)
+	if (q->first < 0) {
 		q->first = DQUEUE_MAXLENGTH - 1;
+	}
 
 	int index = q->first;
 
@@ -107,8 +110,9 @@ int DequeueBack(DQueue* q) {
 	q->last++;
 
 	// Wrap around
-	if (q->last >= DQUEUE_MAXLENGTH)
+	if (q->last >= DQUEUE_MAXLENGTH) {
 		q->last = 0;
+	}
 
 	// Dohvati element i makni iz polja
 	int result = q->elements[index];
@@ -123,8 +127,9 @@ int Front(DQueue* q) {
 	int index = q->first - 1;
 
 	// Wrap around
-	if (index < 0)
+	if (index < 0) {
 		index = DQUEUE_MAXLENGTH - 1;
+	}
 
 	return q->elements[index];
 }
@@ -150,6 +155,10 @@ void PrintQueue(DQueue* q) {
 
 	// Dok ima elemenata u queueu, dohvati sa pocetka, ispisi na ekran i gurni u drugi queue na pocetak
 	// Ta operacija okrece redoslijed kao u stacku, znaci iz queuea 3 2 1 -> u queue 1 2 3 (jer uzimamo sa kraja i stavljamo na kraj)
+	// 
+	// NAPOMENA: Ako ce trazit da se okrene redoslijed ispisa na ekran, onda samo zamijeniti sve *Front funkcije sa *Back funkcijama ovdje ispod
+	//                                                                                                vvvvvvvvvvvvvvvvvv
+
 	while (!Empty(q)) {
 		int num = DequeueFront(q);
 		printf("%d ", num);
@@ -166,51 +175,9 @@ void PrintQueue(DQueue* q) {
 	printf("\n");
 }
 
-void DoData(DQueue* Q) {
-	/*
-	UBACI POCETAK 3
-	UBACI KRAJ 7
-	UBACI POCETAK 17
-	IZBACI KRAJ
-	IZBACI POCETAK
-	UBACI POCETAK 17
-	UBACI POCETAK 18
-	UBACI POCETAK 19
-	UBACI POCETAK 20
-	IZBACI KRAJ
-	IZBACI KRAJ
-	IZBACI KRAJ
-	IZBACI POCETAK
-	UBACI KRAJ 3
-	UBACI KRAJ 4
-	UBACI KRAJ 5
-	*/
-
-	EnqueueFront(Q, 3);
-	EnqueueBack(Q, 7);
-	EnqueueFront(Q, 17);
-	DequeueBack(Q);
-	DequeueFront(Q);
-	EnqueueFront(Q, 69);
-	EnqueueFront(Q, 18);
-	EnqueueFront(Q, 19);
-	EnqueueFront(Q, 20);
-	DequeueBack(Q);
-	DequeueBack(Q);
-	DequeueBack(Q);
-	DequeueFront(Q);
-	EnqueueBack(Q, 420);
-	EnqueueBack(Q, 4);
-	EnqueueBack(Q, 5);
-}
-
 void main() {
 	DQueue Q;
 	MakeNull(&Q);
-
-	/*DoData(&Q);
-	while (1) {
-	}*/
 
 	char cmd1[32];
 	char cmd2[32];
