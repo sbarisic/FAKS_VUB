@@ -15,11 +15,6 @@ void MakeNull(DQueue* q) {
 	q->last = 0;
 }
 
-// DQueue je prazan
-int Empty(DQueue* q) {
-	return (q->first) == (q->last);
-}
-
 // Broj elemenata u queue-u
 // 
 //                           Indeksi u polje
@@ -52,6 +47,17 @@ int Count(DQueue* q) {
 
 	return first - last;
 }
+
+// DQueue je prazan
+int Empty(DQueue* q) {
+	return (q->first) == (q->last);
+}
+
+// DQueue je pun
+int Full(DQueue* q) {
+	return Count(q) == (DQUEUE_MAXLENGTH - 1);
+}
+
 
 // U obicnom queue-u je ovo funkcija Enqueue
 void EnqueueFront(DQueue* q, int element) {
