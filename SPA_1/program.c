@@ -53,7 +53,8 @@ int Empty(DQueue* q) {
 	return (q->first) == (q->last);
 }
 
-// DQueue je pun
+// DQueue je pun dok dqueue sadrzi 9 elemenata 
+// Moze sadrzavati 10, ali onda ne razlikujemo pun niz od praznog jer first == last
 int Full(DQueue* q) {
 	return Count(q) == (DQUEUE_MAXLENGTH - 1);
 }
